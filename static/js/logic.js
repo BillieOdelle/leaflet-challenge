@@ -29,7 +29,6 @@ function createFeatures(earthquakeData) {
       let depth = feature.geometry.coordinates[2];
       let radius = markerSize(magnitude);
       let fillColor = getColor(depth);
-      let legend = L.control({ position: 'bottomright' });
 
       return L.circleMarker(latlng, {
         radius: radius,
@@ -54,26 +53,25 @@ function createFeatures(earthquakeData) {
       }
       
   }
-
-  function getColor(depth) {
-    if (depth < 10) {
-      return "#E1BEE7";
-    } else if (depth < 30) {
-      return "#CE93D8";
-    } else if (depth < 50) {
-      return "#BA68C8";
-    } else if (depth < 70) {
-      return "#AB47BC";
-    } else if (depth < 90) {
-      return "#9C2780";
-    } else {
-        return "#8E24AA";
-      }
-      
-  }
-
   createMap(earthquakes);
 }
+
+function getColor(depth) {
+  if (depth < 10) {
+    return "#E1BEE7";
+  } else if (depth < 30) {
+    return "#CE93D8";
+  } else if (depth < 50) {
+    return "#BA68C8";
+  } else if (depth < 70) {
+    return "#AB47BC";
+  } else if (depth < 90) {
+    return "#9C2780";
+  } else {
+      return "#8E24AA";
+    }
+  }
+
 
 function createMap(earthquakes) {
 
@@ -97,9 +95,6 @@ function createMap(earthquakes) {
     Earthquakes: earthquakes
   };
 
-// Add the legend to the map.
-  //legend.addTo(myMap);
-
   // Create our map, giving it the streetmap and earthquakes layers to display on load.
   let myMap = L.map("map", {
     center: [
@@ -116,17 +111,16 @@ function createMap(earthquakes) {
     collapsed: false
   }).addTo(myMap);
 
+  // create legend.
   let legend = L.control({ position: 'bottomright' });
-  // Define the legend content.
+  let grades = ['-10', '10', '30', '50', '70', '90'];
   legend.onAdd = function (map) {
     let div = L.DomUtil.create('div', 'info legend');
-    let grades = [10, 10-30, 30-50, 50-70, 70-90, 90("+")];
-    let labels = [];
-
+    
   // Loop through the depth ranges and generate labels.
   for (let i = 0; i < grades.length; i++) {
     div.innerHTML +=
-      '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+      '<i style="background:' + getColor(grades[i]) + '"></i> ' +
       grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
   }
 
